@@ -3,9 +3,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <title>卓越科技大學校園資訊系統</title>
-<link href="./Administrator Login_files/css.css" rel="stylesheet" type="text/css">
-<script src="./Administrator Login_files/jquery-1.9.1.min.js"></script>
-<script src="./Administrator Login_files/js.js"></script>
+<link href="../css/css.css" rel="stylesheet" type="text/css">
+<script src="../js/jquery-1.9.1.min.js"></script>
+<script src="../js/js.js"></script>
 </head>
 
 <body>
