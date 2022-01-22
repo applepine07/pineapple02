@@ -108,17 +108,15 @@ class DB
             foreach ($array as $key => $value) {
                 $tmp[] = "`$key`='$value'";
             }
-            $sql = "UPDATE $this->table 
-                        SET " . implode(",", $tmp) . " 
-                        WHERE `id`='{$tmp['id']}'";
+            $sql = "UPDATE $this->table SET " . implode(",", $tmp) . " WHERE `id`='{$array['id']}'";
             // 這個缺點在於id也位於字串中，怕會一起update雖然沒關係，需要可以想辦法移除
         } else {
             // insert
             // ('A','B') (`a`,`b`)
-            $sql = "INSERT INTO $this->table (`" . implode("`,`", array_keys($array)) . "`) 
-                                    VALUES ('" . implode("','", $array) . "')";
+            $sql = "INSERT INTO $this->table (`" . implode("`,`", array_keys($array)) . "`) VALUES ('" . implode("','", $array) . "')";
         }
         // 不需它回傳，只需執行故用exec
+        // dd($sql);
         return $this->pdo->exec($sql);
     }
 
@@ -144,7 +142,42 @@ class DB
 }
 
 
+// ----------------
+
 function to($url)
 {
     header("location:" . $url);
 }
+
+function dd($array){
+    print_r($array);
+}
+
+// ----------------
+
+// 將物件實體化，並將total值帶入
+$Ad=new DB('ad');
+$Admin=new DB('admin');
+$Bottom=new DB('bottom');
+$Image=new DB('image');
+$Menu=new DB('menu');
+$Mvim=new DB('mvim');
+$News=new DB('news');
+$Title=new DB('title');
+$Total=new DB('total');
+// function本身可以是一個變數，
+// 所以以下可以想像成$total=$Total->find(1)，$total等於$Total的find(1)
+// 再去這個變數裡的陣列去取值，這樣echo $total['total'];
+// echo $Total->find(1)['total'];
+// dd($Total->all());
+
+// 沒有存在session才要做事
+// 在base檔做的改變優先度優於所有頁面的載入，因為我們在各檔的一開頭就引base檔
+if(!isset($_SESSION['total'])){
+    $total=$Total->find(1);
+    $total['total']++;
+    dd($total);
+    $Total->save($total);
+    $_SESSION['total']=$total['total'];
+}
+
