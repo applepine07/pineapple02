@@ -5,13 +5,36 @@ include "../base.php";
 if (!empty($_FILES['img']['tmp_name'])) {
     move_uploaded_file($_FILES['img']['tmp_name'], "../img/" . $_FILES['img']['name']);
     $data['img'] = $_FILES['img']['name'];
-}else{
-    // 因為我們資料庫設不能空值，所以至少要傳個空白不然不能存到資料庫
-    $data['img']='';
+} else {
+    if($DB->table!='admin' && $DB->table!='menu'){
+        $data['img'] = '';
+    }
 }
 
-$data['text'] = $_POST['text'];
-$data['sh'] = 0;
+// 
+switch ($DB->table) {
+    case "title":
+        $data['text'] = $_POST['text'];
+        $data['sh'] = 0;
+        break;
+    case "admin":
+        $data['acc'] = $_POST['acc'];
+        $data['pw'] = $_POST['pw'];
+        break;
+    case "menu":
+        $data['name'] = $_POST['name'];
+        $data['href'] = $_POST['href'];
+        $data['sh'] = 1;
+        $data['parent'] = 0;
+        break;
+    default:
+        // 是否存在?存在就是$_POST本身，不存在就是空''
+        $data['text'] = $_POST['text'] ?? '';
+        $data['sh'] = 1;
+        break;
+}
+
+
 $DB->save($data);
 
 // dd($_POST);
