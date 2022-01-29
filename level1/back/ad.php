@@ -1,33 +1,32 @@
 <div style="width:99%; height:87%; margin:auto; overflow:auto; border:#666 1px solid;">
     <p class="t cent botli"><?= $DB->title; ?></p>
-    <form method="post" action="api/edit_title.php">
+    <form method="post" action="api/edit_ad.php">
         <table width="100%">
             <tbody>
                 <tr class="yel">
-                    <td width="23%">替代文字</td>
-                    <td width="7%">顯示</td>
-                    <td width="7%">刪除</td>
+                    <td width="80%">替代文字</td>
+                    <td width="10%">顯示</td>
+                    <td width="10%">刪除</td>
                 </tr>
                 <?php
                 $rows = $DB->all();
                 // ↑為啥這裡又用DB了，不用$Title嗎?
                 foreach ($rows as $row) {
-                    $checked=($row['sh']==1)?'checked':'';
+                    $checked = ($row['sh'] == 1) ? 'checked' : '';
                 ?>
                     <tr>
-                        
-                        <td width="23%">
+                        <td>
                             <input type="text" name="text[]" value="<?= $row['text']; ?>">
                         </td>
-                        <td width="7%">
+                        <td>
                             <!-- radio本就是單選，所以只會送一筆，所以不需要設成陣列 -->
-                            <input type="checkbox" name="sh[]" value="<?=$row['id'];?>"<?=$checked;?>>
+                            <input type="checkbox" name="sh[]" value="<?= $row['id']; ?>" <?= $checked; ?>>
                         </td>
-                        <td width="7%">
-                            <input type="checkbox" name="del[]" value="<?= $row['id'];?>">
+                        <td>
+                            <input type="checkbox" name="del[]" value="<?= $row['id']; ?>">
+                            <input type="hidden" name="id[]" value="<?= $row['id']; ?>">
                         </td>
-                        <input type="hidden" name="id[]" value="<?= $row['id'];?>">
-                            
+
                     </tr>
                 <?php
                 }

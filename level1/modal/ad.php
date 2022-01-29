@@ -1,13 +1,9 @@
 <h3>新增標題圖片</h3>
 <hr>
-<form action="" method="post" enctype="multipart/form-data">
+<form action="api/add.php?do=ad" method="post" enctype="multipart/form-data">
     <table>
         <tr>
-            <td>標題區圖片：</td>
-            <td><input type="file" name="img"></td>
-        </tr>
-        <tr>
-            <td>標題區替代文字：</td>
+            <td>動態文字廣告</td>
             <td><input type="text" name="text"></td>
         </tr>
     </table>
