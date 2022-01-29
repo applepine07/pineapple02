@@ -213,7 +213,9 @@ function to($url)
 
 function dd($array)
 {
+    echo "<pre>";
     print_r($array);
+    echo "</pre>";
 }
 
 // ----------------
@@ -279,10 +281,11 @@ switch ($tt) {
     case "news":
         $DB = $News;
         break;
-    case "title":
-        $DB = $Title;
-        break;
     case "total":
         $DB = $Total;
+        break;
+
+    default:
+        $DB = $Title;
         break;
 }
