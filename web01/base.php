@@ -35,7 +35,7 @@ class DB
                 $this->button = "新增網站標題圖片";
                 $this->header = "網站標題";
                 $this->append = "替代文字";
-                $this->upload = "新增網站標題圖片";
+                $this->upload = "網站標題圖片";
                 break;
             case "ad":
                 $this->title = "動態文字廣告管理";
@@ -52,7 +52,7 @@ class DB
                 $this->title = "校園映像資料管理";
                 $this->button = "新增校園映像資料";
                 $this->header = "校園映像資料圖片";
-                $this->upload = "新增校園映像資料";
+                $this->upload = "校園映像資料";
                 break;
             case "news":
                 $this->title = "最新消息資料管理";
