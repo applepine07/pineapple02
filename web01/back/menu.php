@@ -28,17 +28,14 @@
                             <?= $DB->math('count', '*', ['parent' => $row['id']]); ?>
                         </td>
                         <td>
-                            <input type="radio" name="sh" value="<?= $row['id']; ?>" <?= $checked; ?>>
-                        </td>
-                        <td>
-                            <input type="checkbox" name="sh[]" value="<?= $row['id']; ?>">
+                            <input type="checkbox" name="sh[]" value="<?= $row['id']; ?>" <?= $checked; ?>>
                         </td>
                         <td>
                             <input type="checkbox" name="del[]" value="<?= $row['id']; ?>">
                             <input type="hidden" name="id[]" value="<?= $row['id']; ?>">
                         </td>
                         <td>
-                            <input type="button" onclick="op(&#39;#cover&#39;,&#39;#cvr&#39;,&#39;modal/upload.php?do=<?= $DB->table; ?>&id=<?= $row['id']; ?>&#39;)" value="更新圖片">
+                            <input type="button" onclick="op(&#39;#cover&#39;,&#39;#cvr&#39;,&#39;modal/submenu.php?do=<?= $DB->table; ?>&id=<?= $row['id']; ?>&#39;)" value="編輯次選單">
                         </td>
                     </tr>
                 <?php
