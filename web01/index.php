@@ -1,5 +1,5 @@
 <?php
-include "base.php";
+include_once "base.php";
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0040)http://127.0.0.1/test/exercise/collage/? -->
@@ -21,7 +21,7 @@ include "base.php";
 		</div>
 	</div>
 	<div id="main">
-	<?php
+		<?php
 		include "./front/header.php";
 		?>
 		<div id="ms">
@@ -29,9 +29,29 @@ include "base.php";
 				<div id="menuput" class="dbor">
 					<!--主選單放此-->
 					<span class="t botli">主選單區</span>
+					<?php
+					$mains = $Menu->all(['parent' => 0, 'sh' => 1]);
+					foreach ($mains as $main) {
+						echo "<div class='mainmu'>";
+						echo "<a href='{$main['href']}'>";
+						echo $main['name'];
+						echo "</a>";
+						if ($Menu->math('count', '*', ['parent' => $main['id']]) > 0) {
+							$subs = $Menu->all(['parent' => $main['id']]);
+							echo "<div class='mw'>";
+							foreach ($subs as $sub) {
+								echo "<div class='mainmu2'>";
+								echo "<a href='{$sub['href']}'>{$sub['name']}</a>";
+								echo "</div>";
+							}
+							echo "</div>";
+						}
+						echo "</div>";
+					}
+					?>
 				</div>
 				<div class="dbor" style="margin:3px; width:95%; height:20%; line-height:100px;">
-					<span class="t">進站總人數 :<?=$Total->find(1)['total'];?></span>
+					<span class="t">進站總人數 :<?= $Total->find(1)['total']; ?></span>
 				</div>
 			</div>
 			<?php
@@ -43,38 +63,44 @@ include "base.php";
 				include "./front/main.php";
 			}
 			?>
-			<div id="alt" style="position: absolute; width: 350px; min-height: 100px; word-break:break-all; text-align:justify;  background-color: rgb(255, 255, 204); top: 50px; left: 400px; z-index: 99; display: none; padding: 5px; border: 3px double rgb(255, 153, 0); background-position: initial initial; background-repeat: initial initial;">
-			</div>
-			<script>
-				$(".sswww").hover(
-					function() {
-						$("#alt").html("" + $(this).children(".all").html() + "").css({
-							"top": $(this).offset().top - 50
-						})
-						$("#alt").show()
-					}
-				)
-				$(".sswww").mouseout(
-					function() {
-						$("#alt").hide()
-					}
-				)
-			</script>
+
 			<div class="di di ad" style="height:540px; width:23%; padding:0px; margin-left:22px; float:left; ">
 				<!--右邊-->
-				<button style="width:100%; margin-left:auto; margin-right:auto; margin-top:2px; height:50px;" onclick="lo(&#39;back.php&#39;)">管理登入</button>
+				<?php
+				if (isset($_SESSION['login'])) {
+				?>
+					<button style="width:100%; margin-left:auto; margin-right:auto; margin-top:2px; height:50px;" onclick="lo(&#39;back.php&#39;)">返回管理</button>
+				<?php
+				} else {
+				?>
+					<button style="width:100%; margin-left:auto; margin-right:auto; margin-top:2px; height:50px;" onclick="lo(&#39;?do=login&#39;)">管理登入</button>
+				<?php
+				}
+				?>
 				<div style="width:89%; height:480px;" class="dbor">
 					<span class="t botli">校園映象區</span>
+					<div class="t" onclick="pp(1)"><img src="img/up.jpg"></div>
+					<?php
+					$imgs = $Image->all(['sh' => 1]);
+					foreach ($imgs as $key => $img) {
+					?>
+						<div class="im cent" id="ssaa<?= $key; ?>">
+							<img src="img/<?= $img['img']; ?>" style="width:150px;height:103px;border:3px solid orange;margin:1px;">
+						</div>
+					<?php
+					}
+					?>
+					<div class="t" onclick="pp(2)"><img src="img/dn.jpg"></div>
 					<script>
 						var nowpage = 0,
-							num = 0;
+							num = <?= $Image->math("count", "*", ['sh' => 1]); ?>;
 
 						function pp(x) {
 							var s, t;
 							if (x == 1 && nowpage - 1 >= 0) {
 								nowpage--;
 							}
-							if (x == 2 && (nowpage + 1) * 3 <= num * 1 + 3) {
+							if (x == 2 && (nowpage + 3) < num) {
 								nowpage++;
 							}
 							$(".im").hide()
@@ -90,7 +116,7 @@ include "base.php";
 		</div>
 		<div style="clear:both;"></div>
 		<div style="width:1024px; left:0px; position:relative; background:#FC3; margin-top:4px; height:123px; display:block;">
-			<span class="t" style="line-height:123px;"><?=$Bottom->find(1)['bottom'];?></span>
+			<span class="t" style="line-height:123px;"><?= $Bottom->find(1)['bottom']; ?></span>
 		</div>
 	</div>
 

@@ -75,12 +75,22 @@ body
 	line-height:30px;
 	padding:2px 10px 2px 10px;
 	margin:7px 1px 7px 1px;
+	height: 30px;
 }
 .mainmu:hover
 {
 	background:url(../img/menu2.fw.png) center no-repeat;
 	background-size:cover;
 }
+
+.mw{
+	position:relative;
+	top: -10px;
+	z-index:99;
+	left:120px;
+	display: none;
+}
+
 .mainmu2
 {
 	position:relative;
