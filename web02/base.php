@@ -48,13 +48,14 @@ class DB
     // all
     public function all(...$arg)
     {
-        $sql = "SELECT * FROM $this->table ";
-        switch (count($arg)) {
+        $sql="SELECT * FROM $this->table ";
+        switch(count($arg)) {
             case 2:
                 foreach ($arg[0] as $key => $value) {
                     $tmp[] = "`$key`='$value'";
                 }
                 $sql .= " WHERE " . implode(" AND ", $tmp) . " " . $arg[1];
+                break;
             case 1:
                 if (is_array($arg[0])) {
                     foreach ($arg[0] as $key => $value) {
