@@ -29,11 +29,21 @@
                     <td class="switch">
                         <div class="short"><?= mb_substr($row['text'], 0, 20); ?>...</div>
                         <div class="pop">
-                            <h1 style="color:skyblue"><?=$tarray[$row['type']];?></h1>
+                            <h1 style="color:skyblue"><?= $tarray[$row['type']]; ?></h1>
                             <?= nl2br($row['text']); ?>
                         </div>
                     </td>
-                    <td><?= $row['good']; ?>個人說<img src="./icon/02B03.jpg" width="25px"></td>
+                    <td><?= $row['good']; ?>個人說<img src="./icon/02B03.jpg" width="25px">-<?php
+                                                                                            if (isset($_SESSION['login'])) {
+                                                                                                $chk = $Log->math('count', '*', ['news' => $row['id'], 'user' => $_SESSION['login']]);
+                                                                                                if ($chk > 0) {
+                                                                                                    echo "<a class='g' data-news='{$row['id']}' data-type='1'>收回讚</a>";
+                                                                                                } else {
+                                                                                                    echo "<a class='g' data-news='{$row['id']}' data-type='2'>讚</a>";
+                                                                                                }
+                                                                                            }
+
+                                                                                            ?></td>
                 </tr>
             <?php
             }
@@ -68,5 +78,26 @@
 <script>
     $(".switch").hover(function() {
         $(this).parent().find(".pop").toggle();
+    })
+    $(".g").on("click", function() {
+        let type = $(this).data('type');
+        let news = $(this).data('news');
+        $.post("api/good.php", {
+            type,
+            news
+        }, () => {
+            location.reload();
+            // switch (type) {
+            //     case 1:
+            //         $(this).text("讚");
+            //         $(this).data('type', 2);
+            //         break;
+
+            //     case 2:
+            //         $(this).text("收回讚");
+            //         $(this).data('type', 1);
+            //         break;
+            // }
+        })
     })
 </script>
