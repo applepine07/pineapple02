@@ -1,170 +1,68 @@
-<?php
-date_default_timezone_set("Asia/Taipei");
-session_start();
-
-class DB{
-    protected $dsn="mysql:host=localhost;charset=utf8;dbname=web02";
-    protected $user="root";
-    protected $pw='';
-    protected $pdo;
-    protected $table;
-
-
-    public function __construct($table){
-        $this->table=$table;
-        $this->pdo=new PDO($this->dsn,$this->user,$this->pw);
-    }
-
-    public function find($id){
-        $sql="SELECT * FROM $this->table WHERE ";
-
-        if(is_array($id)){
-            foreach($id as $key => $value){
-                $tmp[]="`$key`='$value'";
-            }
-
-            $sql .= implode(" AND ",$tmp);
-        }else{
-            $sql .= " `id`='$id'";
-        }
-
-        return $this->pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
-    }
-    public function all(...$arg){
-        $sql="SELECT * FROM $this->table ";
-
-        switch(count($arg)){
-            case 2:
-                foreach($arg[0] as $key => $value){
-                    $tmp[]="`$key`='$value'";
-                }
-
-                $sql .=" WHERE ".implode(" AND ",$tmp)." ".$arg[1];
-
-            break;
-            case 1:
-                if(is_array($arg[0])){
-                    
-                    foreach($arg[0] as $key => $value){
-                        $tmp[]="`$key`='$value'";
-                    }
-                    $sql .= " WHERE ".implode(" AND ",$tmp);
-                }else{
-                    $sql .= $arg[0];
-                    
-                }
-            break;
-        }
-
-        return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-    }
-    public function math($method,$col,...$arg){
-        $sql="SELECT $method($col) FROM $this->table ";
-
-        switch(count($arg)){
-            case 2:
-                foreach($arg[0] as $key => $value){
-                    $tmp[]="`$key`='$value'";
-                }
-
-                $sql .=" WHERE ".implode(" AND ",$tmp)." ".$arg[1];
-
-            break;
-            case 1:
-                if(is_array($arg[0])){
-                    foreach($arg[0] as $key => $value){
-                        $tmp[]="`$key`='$value'";
-                    }
-                    $sql .= " WHERE ".implode(" AND ",$tmp);
-                }else{
-                    $sql .= $arg[0];
-                    
-                }
-            break;
-        }
-
-
-        return $this->pdo->query($sql)->fetchColumn();
-    }
-    public function save($array){
-        if(isset($array['id'])){
-            //update
-            foreach($array as $key => $value){
-                $tmp[]="`$key`='$value'";
-            }
-            $sql="UPDATE $this->table 
-                     SET ".implode(",",$tmp)."
-                   WHERE `id`='{$array['id']}'";
-        }else{
-            //insert
-
-            $sql="INSERT INTO $this->table (`".implode("`,`",array_keys($array))."`) 
-                                     VALUES('".implode("','",$array)."')";
-        }
-
-       // echo $sql;
-        return $this->pdo->exec($sql);
-    }
-
-    public function del($id){
-        $sql="DELETE FROM $this->table WHERE ";
-
-        if(is_array($id)){
-            foreach($id as $key => $value){
-                $tmp[]="`$key`='$value'";
-            }
-
-            $sql .= implode(" AND ",$tmp);
-        }else{
-            $sql .= " `id`='$id'";
-        }
-
-        return $this->pdo->exec($sql);
-    }
-    public function q($sql){
-        return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-
-}
-
-function dd($array){
-    echo "<pre>";
-    print_r($array);
-    echo "</pre>";
-}
-
-function to($url){
-    header("location:".$url);
-}
-
-$User=new DB('user');
-$News=new DB('news');
-$View=new DB('view');
-$Que=new DB('que');
-$Log=new DB('log');
-
-
-/**
- * 先找到有沒有今日的瀏灠人數紀錄
- *   * 有->瀏灠人次加1
- *   * 沒有->增加今日的新紀錄,瀏灠人次為1
- */
-
-if(!isset($_SESSION['view'])){
+<fieldset>
+    <legend>最新文章管理</legend>
+<form action="api/news_admin.php" method="post">
+    <table>
+        <tr>
+            <td width="10%">編號</td>
+            <td width="75%">標題</td>
+            <td width="10%">顯示</td>
+            <td width="10%">刪除</td>
+        </tr>
+        <?php
     
-    if($View->math('count','*',['date'=>date("Y-m-d")])>0){
-        $view=$View->find(['date'=>date("Y-m-d")]);
-        //$view['total']++
-        //$view['total']=$view['total']+1;
-        $view['total']+=1;
-        $View->save($view);
-        $_SESSION['view']=$view['total'];
-    }else{
-        $View->save(['date'=>date("Y-m-d"),'total'=>1]);
-        $_SESSION['view']=1;
+        $total=$News->math("count","*");
+        $div=3;
+        $pages=ceil($total/$div);
+        $now=$_GET['p']??1;
+        $start=($now-1)*$div;
+    
+        $rows=$News->all(" limit $start,$div");
+        foreach ($rows as $key => $row) {
+            $chk=($row['sh']==1)?"checked":"";
+        ?>
+        <tr>
+            <td><?=$start+1+$key;?></td>
+            <td><?=$row['title'];?></td>
+            <td>
+                <input type="checkbox" name="sh[]" value="<?=$row['id'];?>" <?=$chk;?> >
+            </td>
+            <td>
+                <input type="checkbox" name="del[]" value="<?=$row['id'];?>">
+                <input type="hidden" name="id[]" value="<?=$row['id'];?>">
+
+            </td>
+        </tr>
+        <?php
+        }
+        ?>
+    </table>
+    <div class='ct'>
+    <?php
+    
+    if(($now-1)>0){
+        $prev=$now-1;
+        echo "<a href='?do=news&p=$prev'> ";
+        echo " < ";
+        echo " </a>";
     }
-}
-
-
-?>
+    
+    
+    for($i=1;$i<=$pages;$i++){
+        $font=($now==$i)?'24px':'16px';
+        echo "<a href='?do=news&p=$i' style='font-size:$font'> ";
+        echo $i;
+        echo " </a>";
+    }
+    
+    if(($now+1)<=$pages){
+        $next=$now+1;
+        echo "<a href='?do=news&p=$next'> ";
+        echo " > ";
+        echo " </a>";
+    }
+    
+    ?>
+    </div>
+    <div class="ct"><input type="submit" value="確定修改"></div>
+</form>
+</fieldset>
