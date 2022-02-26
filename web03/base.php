@@ -129,7 +129,7 @@ class DB
 }
 
 $Movie = new DB('movie');
-$Order = new DB('order');
+$Ord = new DB('ord');
 $Poster = new DB('poster');
 // $a=$s->find(1);
 // $a=$s->all(['major'=>'美容科']);
