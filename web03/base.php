@@ -65,7 +65,7 @@ class DB
                 }
                 break;
         }
-        echo $sql;
+        // echo $sql;
         return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     }
     // math
@@ -104,7 +104,7 @@ class DB
             $sql="INSERT INTO $this->table (`".implode("`,`",array_keys($array))."`)
                                     VALUES ('".implode("','",$array)."')";
         }     
-        echo $sql;
+        // echo $sql;
         return $this->pdo->exec($sql);
     }
     // del
@@ -119,7 +119,7 @@ class DB
         } else {
             $sql .= " `id`='$id'";
         }
-        echo $sql;
+        // echo $sql;
         return $this->pdo->exec($sql);
     }
     // q
