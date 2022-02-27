@@ -1,6 +1,14 @@
 <?php
 date_default_timezone_set("Asia/Taipei");
 session_start();
+
+// $ls=[
+//     1=>"普遍級",
+//     2=>"輔導級",
+//     3=>"保護級",
+//     4=>"限制級"
+// ];
+
 function dd($array)
 {
     echo "<pre>";
@@ -21,6 +29,7 @@ class DB
 
     protected $table;
     protected $pdo;
+    protected $level=[1=>"普遍級",2=>"輔導級",3=>"保護級",4=>"限制級"];
     
     // construct
     public function __construct($table)
@@ -123,8 +132,11 @@ class DB
         return $this->pdo->exec($sql);
     }
     // q
-    function q($sql){
+    public function q($sql){
         return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function level($level){
+        return $this->level[$level];
     }
 }
 
