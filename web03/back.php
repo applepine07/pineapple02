@@ -30,9 +30,36 @@ include_once "base.php";
       </marquee>
     </div>
     <div id="mm">
-    <?php
-      include "./back/main.php";
-      ?>   
+      <?php
+
+      // 判斷login
+      if (!empty($_POST)) {
+        if ($_POST['acc'] == "admin" && $_POST['pw'] == "1234") {
+          $_SESSION['login'] = 'admin';
+        } else {
+          echo "<div class='ct' style='color:red'>帳號密碼錯誤</div>";
+        }
+      }
+
+      // 建立login後就載入nav
+      if (isset($_SESSION['login'])) {
+        include "back/nav.php";
+
+        // 然後判斷do頁面，有do就載do，沒do就是空值防別人亂打，然後載main
+        $do = $_GET['do'] ?? '';
+        $file = "./back/" . $do . ".php";
+        if (file_exists($file)) {
+          include $file;
+        } else {
+          include "back/main.php";
+        }
+        // 沒有login的話就載入login
+      } else {
+        include "back/login.php";
+      }
+
+
+      ?>
     </div>
     <div id="bo"> ©Copyright 2010~2014 ABC影城 版權所有 </div>
   </div>
