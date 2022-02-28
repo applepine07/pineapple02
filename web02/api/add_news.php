@@ -10,5 +10,5 @@ if(!empty($_POST)){
     $News->save($news);
 }
 
-to("../back.php?do=home");
+to("../back.php?do=news");
 ?>
