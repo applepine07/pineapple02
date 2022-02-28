@@ -8,8 +8,9 @@
 
 <script>
     function find(){
-        $.post("api/find_pw.php",{email:$("#email").val()},(result)=>{
-            $("#result").text(result);
+        $.post("api/find_pw.php",{email:$('#email').val()},(res)=>{
+            $('#result').text(res);
         })
     }
+    
 </script>

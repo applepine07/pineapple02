@@ -1,16 +1,13 @@
 <?php
 include_once "../base.php";
 
-$acc=$_POST['acc'];
-$pw=$_POST['pw'];
-echo $chk=$User->math('count','*',['acc'=>$acc,'pw'=>$pw]);
-// echo $chk=$User->math('count','*',['acc'=>$acc,'pw'=>$pw]);
-
-// echo ($chk>0)?1:0;
-
+$chk=$User->math('count','*',['acc'=>$_POST['acc'],'pw'=>$_POST['pw']]);
 if($chk>0){
     echo 1;
-    $_SESSION['login']=$acc;
+    $_SESSION['login']=$_POST['acc'];
 }else{
     echo 0;
 }
+
+// to("../index.php?do=login");
+?>

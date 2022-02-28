@@ -1,6 +1,6 @@
 <fieldset>
     <legend>會員註冊</legend>
-    <div style="color:red">請設定你要註冊的帳號及密碼(最長12個字元)</div>
+    <div style="color:red">請設定您要註冊的帳號及密碼(最長12個字元)</div>
     <table>
         <tr>
             <td>Step1:登入帳號</td>
@@ -29,38 +29,35 @@
         </tr>
     </table>
 </fieldset>
+
 <script>
     function reset() {
-        $("#acc,#pw,#pw2,#email").val("");
+        $('#acc,#pw,#pw2,#email').val("");
     }
 
     function reg() {
         let form = {
-            acc: $("#acc").val(),
-            pw: $("#pw").val(),
-            pw2: $("#pw2").val(),
-            email: $("#email").val(),
+            acc: $('#acc').val(),
+            pw: $('#pw').val(),
+            pw2: $('#pw2').val(),
+            email: $('#email').val(),
         }
-        if (Object.values(form).indexOf('') >= 0) {
-            alert("不可空白");
+        if (form.acc == '' || form.pw == '' || form.pw2 == '' || form.email == '') {
+            alert("不得空白");
         } else {
             if (form.pw != form.pw2) {
                 alert("密碼錯誤");
+                reset();
             } else {
-                $.post("api/chk_acc.php", {
-                    acc: form.acc
-                }, (chk) => {
-                    if (parseInt(chk) == 1) {
+                $.post("api/chk_acc.php",{acc:form.acc},(chk)=>{
+                    if(parseInt(chk)==1){
                         alert("帳號重覆");
-                    } else {
+                    }else{
                         delete form.pw2;
-                        $.post("api/reg.php", form, (res) => {
-                            if (parseInt(res) == 1) {
-                                alert("註冊完成，歡迎加入");
-                                location.href = 'index.php?do=login'
-                            } else {
-                                alert("註冊失敗");
-                            }
+                        $.post("api/reg.php",form,(res)=>{
+                            // alert(res);
+                            alert("註冊成功");
+                            location.href='?do=login';
                         })
                     }
                 })

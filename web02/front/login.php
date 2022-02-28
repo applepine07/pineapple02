@@ -2,11 +2,11 @@
     <legend>會員登入</legend>
     <table>
         <tr>
-            <td>帳號</td>
+            <td>帳號:</td>
             <td><input type="text" name="acc" id="acc"></td>
         </tr>
         <tr>
-            <td>密碼</td>
+            <td>密碼:</td>
             <td><input type="password" name="pw" id="pw"></td>
         </tr>
         <tr>
@@ -15,8 +15,8 @@
                 <button onclick="reset()">清除</button>
             </td>
             <td>
-                <a href="index.php?do=forget">忘記密碼</a>
-                <a href="index.php?do=reg">尚未註冊</a>
+                <a href="?do=forget">忘記密碼</a>|
+                <a href="?do=reg">尚末註冊</a>
             </td>
         </tr>
     </table>
@@ -24,28 +24,30 @@
 
 <script>
     function reset() {
-        $("#acc,#pw").val("");
+        $('#acc', '#pw').val("");
     }
 
     function login() {
         let user = {
-            acc: $("#acc").val(),
-            pw: $("#pw").val()
+            acc: $('#acc').val(),
+            pw: $('#pw').val()
         }
         $.post("api/chk_acc.php", {
             acc: user.acc
         }, (chk) => {
             if (parseInt(chk) == 0) {
-                alert("查無帳號");
+                alert("查無此帳號");
+                reset();
             } else {
                 $.post("api/chk_pw.php", user, (chk) => {
-                    if (parseInt(chk) == 0) {
+                    if(parseInt(chk)==0){
                         alert("密碼錯誤");
-                    } else {
-                        if (user.acc == "admin") {
-                            location.href = "back.php";
-                        } else {
-                            location.href = 'index.php';
+                        reset();
+                    }else{
+                        if(user.acc=='admin'){
+                            location.href='back.php';
+                        }else{
+                            location.href='index.php';
                         }
                     }
                 })
