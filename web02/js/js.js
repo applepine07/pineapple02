@@ -1,4 +1,11 @@
 // JavaScript Document
+
+function logout(){
+	$.post("api/logout.php",()=>{
+		location.href='index.php';
+	})
+}
+
 function lo(th,url)
 {
 	$.ajax(url,{cache:false,success: function(x){$(th).html(x)}})

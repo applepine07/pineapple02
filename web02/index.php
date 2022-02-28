@@ -12,6 +12,17 @@ include "base.php";
 	<link href="./css/css.css" rel="stylesheet" type="text/css">
 	<script src="./js/jquery-1.9.1.min.js"></script>
 	<script src="./js/js.js"></script>
+	<style>
+		.pop{
+			width: 300px;
+			height: 300px;
+			color: #fff;
+			background: rgba(51,51,51,0.8);
+			overflow: auto;
+			position: absolute;
+			display: none;
+		}
+	</style>
 </head>
 
 <body>
@@ -21,7 +32,7 @@ include "base.php";
 	<!-- iframe -->
 	<div id="all">
 		<div id="title">
-			<?=date("m月d號 l");?>| 今日瀏覽: <?=$View->find(['date'=>date("Y-m-d")])['total'];?> | 累積瀏覽: <?=$View->math('sum','total');?>
+			<?= date("m月d號 l"); ?>| 今日瀏覽: <?= $View->find(['date' => date("Y-m-d")])['total']; ?> | 累積瀏覽: <?= $View->math('sum', 'total'); ?>
 			<a href="index.php" style="float: right;">回首頁</a>
 		</div>
 		<div id="title2">
@@ -42,20 +53,41 @@ include "base.php";
 
 					<span style="width:80%; display:inline-block;">
 						<marquee>請民眾踴躍投稿電子報，讓電子報成為大家相
-互交流、分享的園地！詳見最新文章</marquee>
+							互交流、分享的園地！詳見最新文章</marquee>
 					</span>
 					<span style="width:18%; display:inline-block;">
-						<a href="?do=login">會員登入</a>
+						<?php
+						if (isset($_SESSION['login'])) {
+							if ($_SESSION['login'] == 'admin') {
+						?>
+								歡迎，admin<br><button onclick="location.href='back.php'">管理</button>|
+								<button onclick="logout()">登出</button>
+							<?php
+							} else {
+							?>
+								歡迎，<?= $_SESSION['login']; ?><br>
+								<button onclick="logout()">登出</button>
+							<?php
+							}
+
+							?>
+						<?php
+						} else {
+						?>
+							<a href="?do=login">會員登入</a>
+						<?php
+						}
+						?>
 					</span>
 					<div class="">
 						<?php
-							$do=$_GET['do']??'home';
-							$file="./front/".$do.".php";
-							if(file_exists($file)){
-								include $file;
-							}else{
-								include "./front/home.php";
-							}
+						$do = $_GET['do'] ?? 'home';
+						$file = "./front/" . $do . ".php";
+						if (file_exists($file)) {
+							include $file;
+						} else {
+							include "./front/home.php";
+						}
 						?>
 					</div>
 				</div>

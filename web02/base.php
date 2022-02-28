@@ -11,7 +11,7 @@ function dd($array)
 
 function to($url)
 {
-    header("locatioin:" . $url);
+    header("location:" . $url);
 }
 
 class DB
