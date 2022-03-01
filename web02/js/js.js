@@ -1,8 +1,8 @@
 // JavaScript Document
 
 function logout(){
-	$.post("api/logout.php",()=>{
-		location.href='index.php';
+	$.post("api/logout.php",{},()=>{
+		location.href="index.php";
 	})
 }
 
