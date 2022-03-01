@@ -9,14 +9,13 @@
     </fieldset>
     <fieldset style="width: 70%;">
         <legend>文章列表</legend>
-        <div id="newslist">
-        </div>
+        <div id="newslist"></div>
         <div id="news" style="display: none;"></div>
     </fieldset>
 </div>
 
 <script>
-    // getlist(1);
+    getlist(1);
     $('.tag').on("click",function(){
         let navtag=$(this).text();
         $('#navtag').text(navtag);
@@ -31,7 +30,6 @@
             $('#newslist').show();
         })
     }
-
     function getnews(id){
         $.get("api/getnews.php",{id},(news)=>{
             $('#news').html(news);
@@ -39,6 +37,5 @@
             $('#news').show();
         })
     }
-
 
 </script>
