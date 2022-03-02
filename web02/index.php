@@ -13,15 +13,7 @@ include "base.php";
 	<script src="./js/jquery-1.9.1.min.js"></script>
 	<script src="./js/js.js"></script>
 	<style>
-		.pop{
-			width: 300px;
-			height: 300px;
-			color: #fff;
-			background: rgba(51,51,51,0.8);
-			overflow: auto;
-			position: absolute;
-			display: none;
-		}
+		
 	</style>
 </head>
 

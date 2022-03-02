@@ -3,6 +3,15 @@
         background-color: yellowgreen;
         cursor: pointer;
     }
+    .pop{
+			width: 300px;
+			height: 300px;
+			color: #fff;
+			background: rgba(51,51,51,0.8);
+			overflow: auto;
+			position: absolute;
+			display: none;
+		}
 </style>
 <fieldset>
     <legend>目前位置：首頁 > 人氣文章區</legend>
@@ -80,6 +89,7 @@
     </div>
 </fieldset>
 <script>
+    
     $('.switch').hover(function() {
         $(this).parent().find(".pop").toggle();
     })

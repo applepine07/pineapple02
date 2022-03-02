@@ -1,14 +1,11 @@
 <?php
 include_once "../base.php";
 
-// dd($_POST);
-if(!empty($_POST)){
-    $news['title']=$_POST['title'];
-    $news['text']=$_POST['text'];
-    $news['type']=$_POST['type'];
-
-    $News->save($news);
+if(isset($_POST['del'])){
+    foreach($_POST['del'] as $id){
+        $User->del($id);
+    }
 }
 
-to("../back.php?do=news");
+to("../back.php?do=admin");
 ?>
