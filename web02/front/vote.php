@@ -17,5 +17,5 @@ $subject = $Que->find($_GET['id']);
             <input type="submit" value="我要投票">
         </div>
     </form>
-    
+
 </fieldset>
