@@ -2,7 +2,7 @@
 
 <fieldset>
     <legend>目前位置：首頁 > 最新文章區</legend>
-    <div><button onclick="location.href='?do=que'">新增問卷</button></div>
+    <div><button onclick="location.href='?do=add_que'">新增問卷</button></div>
     <table style="width: 95%;">
         <tr>
             <td style="width:70%">問卷名稱</td>
@@ -22,9 +22,6 @@
             <tr>
                 <td><?= $row['text']; ?></td>
                 <td><?= $row['count']; ?></td>
-                <td>
-                    <a href="./api/flag.php?id=<?=$row['id'];?>"><?=($row['sh']==1)?"開放":"關閉";?></a>
-                </td>
                 <td>
                     <a type="button" href="./api/flag.php?id=<?= $row['id']; ?>"><?= ($row['sh'] == 1) ? "開放" : "關閉"; ?></a>
                 </td>

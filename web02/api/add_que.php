@@ -8,4 +8,4 @@ foreach($_POST['options'] as $opt){
     $Que->save(['parent'=>$parent_id,'count'=>0,'text'=>$opt]);
 }
 
-to("../back.php?do=que");
+to("../back.php?do=poll");
