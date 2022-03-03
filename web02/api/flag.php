@@ -1,8 +1,8 @@
 <?php include_once "../base.php";
 $id=$_GET['id'];
-$flag=$Que->find($id);
-$flag['sh']=($flag['sh']+1)%2;
-$Que->save($flag);
+$subject=$Que->find($id);
+$subject['sh']=($subject['sh']+1)%2;
+$Que->save($subject);
 to("../back.php?do=poll");
 
 ?>
