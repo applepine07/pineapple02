@@ -7,7 +7,7 @@
         </div>
         <div class="clo" id="opt">
             <div>
-                <input type="text" name="options[]">
+                <div><input type="text" name="options[]"></div>
                 <input type="button" onclick="more()" value="更多">
             </div>
         </div>
@@ -18,7 +18,7 @@
     </form>
 </fieldset>
 <script>
-    function more() {
+    function more(){
         let opt = `<div><input type="text" name="options[]"></div>`;
         $('#opt').prepend(opt);
     }

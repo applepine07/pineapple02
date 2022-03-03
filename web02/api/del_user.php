@@ -8,4 +8,6 @@ if(isset($_POST['del'])){
 }
 
 to("../back.php?do=admin");
+
 ?>
+
