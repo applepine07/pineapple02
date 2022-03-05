@@ -1,20 +1,22 @@
 <?php
+
 $movie=$Movie->find($_GET['id']);
+$day=date("j",strtotime($movie['ondate']));
+$month=date("n",strtotime($movie['ondate']));
 ?>
 
-<h3 class="ct">編輯院線片</h3>
-
+<h3 class='ct'>編輯院線片</h3>
 <form action="api/edit_movie.php" method="post" enctype="multipart/form-data">
-    <div style="display:flex;">
-        <div style="width:15%;">影片資料</div>
-        <div style="width:85%;">
+    <div style="display:flex">
+        <div style="width:15%">影片資料</div>
+        <div style="width:85%">
             <div>
                 <label>片名:</label>
                 <input type="text" name="name" value="<?=$movie['name'];?>">
             </div>
             <div>
                 <label>分級:</label>
-                <select name="level">
+                <select name="level" >
                     <option value="1">普遍級</option>
                     <option value="2">輔導級</option>
                     <option value="3">保護級</option>
@@ -26,23 +28,25 @@ $movie=$Movie->find($_GET['id']);
                 <input type="number" name="length" value="<?=$movie['length'];?>">
             </div>
             <div>
-                <label>上映日期</label>
+                <label>上映日期:</label>
                 <select name="year">
                     <option value="2022">2022</option>
                     <option value="2023">2023</option>
                     <option value="2024">2024</option>
                 </select>年
                 <select name="month">
-                    <?php
+                <?php
                     for($i=1;$i<=12;$i++){
-                       echo "<option value='$i'>$i</option>";
+                        $selected=($i==$month)?"selected":"";
+                        echo "<option value='$i' $selected>$i</option>";
                     }
                     ?>
                 </select>月
                 <select name="day">
-                <?php
-                    for($m=1;$m<=31;$m++){
-                       echo "<option value='$m'>$m</option>";
+                    <?php
+                    for($i=1;$i<=31;$i++){
+                        $selected=($i==$day)?"selected":"";
+                        echo "<option value='$i' $selected>$i</option>";
                     }
                     ?>
                 </select>日
@@ -65,14 +69,14 @@ $movie=$Movie->find($_GET['id']);
             </div>
         </div>
     </div>
-    <div style="display:flex;">
-        <div style="width:15%;">劇情簡介</div>
-        <div style="width:85%;">
+    <div style="display:flex">
+        <div style="width:15%">劇情簡介</div>
+        <div style="width:85%">
             <textarea name="intro" style="width:99%"><?=$movie['intro'];?></textarea>
         </div>
     </div>
     <div class="ct">
-        <input type="hidden" name="id" value="<?=$movie['id'];?>">
+        <input type="hidden" name="id"  value="<?=$movie['id'];?>">
         <input type="submit" value="修改">
         <input type="reset" value="重置">
     </div>
