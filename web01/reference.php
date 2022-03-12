@@ -1,124 +1,264 @@
 <?php
-include_once "base.php";
+date_default_timezone_set("Asia/Taipei");
+session_start();
 
+// to
+function to($url)
+{
+    header("location:" . $url);
+}
+// dd
+function dd($array)
+{
+    echo "<pre>";
+    print_r($array);
+    echo "</pre>";
+}
 
-?>
+class DB
+{
+    // 前置
+    protected $dsn = "mysql:host=localhost;charset=utf8;dbname=web01";
+    protected $user = "root";
+    protected $pw = "";
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<!-- saved from url=(0040)http://127.0.0.1/test/exercise/collage/? -->
-<html xmlns="http://www.w3.org/1999/xhtml">
+    protected $pdo;
+    public $table;
 
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    public $title;
+    public $button;
+    public $header;
+    public $append;
+    public $upload;
 
-    <title>卓越科技大學校園資訊系統</title>
-    <link href="./css/css.css" rel="stylesheet" type="text/css">
-    <script src="./js/jquery-1.9.1.min.js"></script>
-    <script src="./js/js.js"></script>
-</head>
+    // construct
+    public function __construct($table)
+    {
+        $this->table = $table;
+        $this->pdo = new PDO($this->dsn, $this->user, $this->pw);
+        $this->setStr($table);
+    }
 
-<body>
-    <div id="cover" style="display:none; ">
-        <div id="coverr">
-            <a style="position:absolute; right:3px; top:4px; cursor:pointer; z-index:9999;" onclick="cl(&#39;#cover&#39;)">X</a>
-            <div id="cvr" style="position:absolute; width:99%; height:100%; margin:auto; z-index:9898;"></div>
-        </div>
-    </div>
-    <div id="main">
-        <?php include "front/header.php"; ?>
-        <div id="ms">
-            <div id="lf" style="float:left;">
-                <div id="menuput" class="dbor">
-                    <!--主選單放此-->
-                    <span class="t botli">主選單區</span>
-                    <?php
-                    $mains = $Menu->all(['parent' => 0, 'sh' => 1]);
-                    foreach ($mains as $main) {
-                        echo "<div class='mainmu'>";
-                        echo "<a href='{$main['href']}'>";
-                        echo $main['name'];
-                        echo "</a>";
-                        if ($Menu->math('count', '*', ['parent' => $main['id']]) > 0) {
-                            $subs = $Menu->all(['parent' => $main['id']]);
-                            echo "<div class='mw'>";
-                            foreach ($subs as $sub) {
-                                echo "<div class='mainmu2'>";
-                                echo "<a href='{$sub['href']}'>{$sub['name']}</a>";
-                                echo "</div>";
-                            }
-                            echo "</div>";
-                        }
-                        echo "</div>";
-                    }
+    // setStr
+    private function setStr($table)
+    {
+        switch ($table) {
+            case "title":
+                $this->title = "網站標題管理";
+                $this->button = "新增網站標題圖片";
+                $this->header = "網站標題";
+                $this->append = "替代文字";
+                $this->upload = "網站標題圖片";
+                break;
+            case "ad":
+                $this->title = "動態文字廣告管理";
+                $this->button = "新增動態文字廣告";
+                $this->header = "動態文字廣告";
+                break;
+            case "mvim":
+                $this->title = "動畫圖片管理";
+                $this->button = "新增動畫圖片";
+                $this->header = "動畫圖片";
+                $this->upload = "動畫圖片";
+                break;
+            case "image":
+                $this->title = "校園映像資料管理";
+                $this->button = "新增校園映像資料";
+                $this->header = "校園映像資料圖片";
+                $this->upload = "校園映像資料";
+                break;
+            case "news":
+                $this->title = "最新消息資料管理";
+                $this->button = "新增最新消息資料";
+                $this->header = "最新消息資料內容";
+                break;
+            case "total":
+                $this->title = "進站總人數管理";
+                $this->button = "";
+                $this->header = "進站總人數";
+                break;
+            case "bottom":
+                $this->title = "頁尾版權資料管理";
+                $this->button = "";
+                $this->header = "頁尾版權資料";
+                break;
+            case "admin":
+                $this->title = "管理者帳號管理";
+                $this->button = "新增管理者帳號";
+                $this->header = "帳號";
+                $this->append = "密碼";
+                break;
+            case "menu":
+                $this->title = "選單管理";
+                $this->button = "新增主選單";
+                $this->header = "主選單名稱";
+                $this->append = "選單連結網址";
+                break;
+        }
+    }
 
-
-                    ?>
-
-
-                </div>
-                <div class="dbor" style="margin:3px; width:95%; height:20%; line-height:100px;">
-                    <span class="t">進站總人數 :<?= $Total->find(1)['total']; ?></span>
-                </div>
-            </div>
-            <?php
-
-            $do = isset($_GET["do"]) ? $_GET["do"] : 'main';
-            $file = "./front/" . $do . ".php";
-            if (file_exists($file)) {
-                include $file;
-            } else {
-                //echo "檔案不存在";
-                include "./front/main.php";
+    // find
+    public function find($id)
+    {
+        $sql = "SELECT * FROM $this->table WHERE ";
+        if (is_array($id)) {
+            foreach ($id as $key => $value) {
+                $tmp[] = "`$key`='$value'";
             }
-            ?>
-
-            <div class="di di ad" style="height:540px; width:23%; padding:0px; margin-left:22px; float:left; ">
-                <!--右邊-->
-                <button style="width:100%; margin-left:auto; margin-right:auto; margin-top:2px; height:50px;" onclick="lo(&#39;?do=login&#39;)">管理登入</button>
-                <div style="width:89%; height:480px;" class="dbor">
-                    <span class="t botli">校園映象區</span>
-                    <div class="t" onclick="pp(1)"><img src="icon/up.jpg"></div>
-                    <?php
-                    $imgs = $Image->all(['sh' => 1]);
-                    foreach ($imgs as $key => $img) {
-                    ?>
-                        <div class="im cent" id="ssaa<?= $key; ?>">
-                            <img src="img/<?= $img['img']; ?>" style="width:150px;height:103px;border:3px solid orange;margin:1px">
-                        </div>
-                    <?php
+            $sql .= implode(" AND ", $tmp);
+        } else {
+            $sql .= " `id`='$id'";
+        }
+        return $this->pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
+    }
+    // all
+    public function all(...$arg)
+    {
+        $sql = "SELECT * FROM $this->table ";
+        switch (count($arg)) {
+            case 2:
+                foreach ($arg[0] as $key => $value) {
+                    $tmp[] = "`$key`='$value'";
+                }
+                $sql .= " WHERE " . implode(" AND ", $tmp) . " " . $arg[1];
+                break;
+            case 1:
+                if (is_array($arg[0])) {
+                    foreach ($arg[0] as $key => $value) {
+                        $tmp[] = "`$key`='$value'";
                     }
-                    ?>
-                    <div class="t" class="t" onclick="pp(2)"><img src="icon/dn.jpg"></div>
+                    $sql .= " WHERE " . implode(" AND ", $tmp);
+                } else {
+                    $sql .= $arg[0];
+                }
+                break;
+        }
+        return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    }
 
-                    <script>
-                        var nowpage = 0,
-                            num = <?= $Image->math("count", "*", ['sh' => 1]); ?>;
+    // q
+    public function q($sql)
+    {
+        return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    }
 
-                        function pp(x) {
-                            var s, t;
-                            if (x == 1 && nowpage - 1 >= 0) {
-                                nowpage--;
-                            }
-                            if (x == 2 && (nowpage + 3) < num) {
-                                nowpage++;
-                            }
-                            $(".im").hide()
-                            for (s = 0; s <= 2; s++) {
-                                t = s * 1 + nowpage * 1;
-                                $("#ssaa" + t).show()
-                            }
-                        }
-                        pp(1)
-                    </script>
-                </div>
-            </div>
-        </div>
-        <div style="clear:both;"></div>
-        <div style="width:1024px; left:0px; position:relative; background:#FC3; margin-top:4px; height:123px; display:block;">
-            <span class="t" style="line-height:123px;"><?= $Bottom->find(1)['bottom']; ?></span>
-        </div>
-    </div>
+    // math
+    public function math($method, $col, ...$arg)
+    {
+        $sql = "SELECT $method($col) FROM $this->table ";
+        switch (count($arg)) {
+            case 2:
+                foreach ($arg[0] as $key => $value) {
+                    $tmp[] = "`$key`='$value'";
+                }
+                $sql .= " WHERE " . implode(" AND ", $tmp) . " " . $arg[1];
+                break;
+            case 1:
+                if (is_array($arg[0])) {
+                    foreach ($arg[0] as $key => $value) {
+                        $tmp[] = "`$key`='$value'";
+                    }
+                    $sql .= " WHERE " . implode(" AND ", $tmp);
+                } else {
+                    $sql .= $arg[0];
+                }
+                break;
+        }
+        return $this->pdo->query($sql)->fetchColumn();
+    }
 
-</body>
+    // save
+    public function save($array)
+    {
+        if (isset($array['id'])) {
+            foreach ($array as $key => $value) {
+                $tmp[] = "`$key`='$value'";
+            }
+            $sql = "UPDATE $this->table SET " . implode(",", $tmp) . " WHERE `id`='{$array['id']}'";
+        } else {
+            $sql = "INSERT INTO $this->table (`" . implode("`,`", array_keys($array)) . "`) 
+                                    VALUES ('" . implode("','", $array) . "')";
+        }
+        // echo $sql;
+        return $this->pdo->exec($sql);
+    }
 
-</html>
+    // del
+    public function del($id)
+    {
+        $sql = "DELETE FROM $this->table WHERE ";
+        if (is_array($id)) {
+            foreach ($id as $key => $value) {
+                $tmp[] = "`$key`='$value'";
+            }
+            $sql .= implode(" AND ", $tmp);
+        } else {
+            $sql .= " `id`='$id'";
+        }
+        return $this->pdo->exec($sql);
+    }
+    
+}
+
+
+
+// -------------
+$Title = new DB('title');
+$Ad = new DB('ad');
+$Image = new DB('image');
+$Menu = new DB('menu');
+$Mvim = new DB('mvim');
+$Bottom = new DB('bottom');
+$Total = new DB('total');
+$Admin = new DB('admin');
+$News = new DB('news');
+
+// session
+if (!isset($_SESSION['total'])) {
+    // ↓不是$Total->find(1)['total']，這樣才會全部取出，存成陣列到變數total去
+    $total = $Total->find(1);
+    // 我們才能改其中一個
+    $total['total']++;
+    // 再全部陣列(id1)存回
+    $Total->save($total);
+    // 純數字存數字
+    $_SESSION['total'] = $total['total'];
+}
+
+// tt
+$tt=$_GET['do']??'';
+switch($tt){
+    case "ad":
+        $DB=$Ad;
+        break;
+    case "title":
+        $DB=$Title;
+        break;
+    case "admin":
+        $DB=$Admin;
+        break;
+    case "menu":
+        $DB=$Menu;
+        break;
+    case "mvim":
+        $DB=$Mvim;
+        break;
+    case "total":
+        $DB=$Total;
+        break;
+    case "image":
+        $DB=$Image;
+        break;
+    case "bottom":
+        $DB=$Bottom;
+        break;
+    case "news":
+        $DB=$News;
+        break;
+
+        default:
+        $DB=$Title;
+        break;
+}
+
+
