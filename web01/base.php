@@ -2,6 +2,19 @@
 date_default_timezone_set("Asia/Taipei");
 session_start();
 
+// to
+function to($url)
+{
+    header("location:" . $url);
+}
+// dd
+function dd($array)
+{
+    echo "<pre>";
+    print_r($array);
+    echo "</pre>";
+}
+
 class DB
 {
     // 前置
@@ -122,6 +135,13 @@ class DB
         }
         return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    // q
+    public function q($sql)
+    {
+        return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     // math
     public function math($method, $col, ...$arg)
     {
@@ -146,6 +166,7 @@ class DB
         }
         return $this->pdo->query($sql)->fetchColumn();
     }
+
     // save
     public function save($array)
     {
@@ -161,6 +182,7 @@ class DB
         // echo $sql;
         return $this->pdo->exec($sql);
     }
+    
     // del
     public function del($id)
     {
@@ -175,25 +197,10 @@ class DB
         }
         return $this->pdo->exec($sql);
     }
-    // q
-    public function q($sql)
-    {
-        return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-    }
+    
 }
 
-// to
-function to($url)
-{
-    header("location:" . $url);
-}
-// dd
-function dd($array)
-{
-    echo "<pre>";
-    print_r($array);
-    echo "</pre>";
-}
+
 
 // -------------
 $Title = new DB('title');
@@ -205,6 +212,16 @@ $Bottom = new DB('bottom');
 $Total = new DB('total');
 $Admin = new DB('admin');
 $News = new DB('news');
+
+// session
+if (!isset($_SESSION['total'])) {
+    // ↓不是$Total->find(1)['total']，這樣才會存成陣列
+    $total = $Total->find(1);
+    $total['total']++;
+    $Total->save($total);
+    // 純數字存數字
+    $_SESSION['total'] = $total['total'];
+}
 
 // tt
 $tt=$_GET['do']??'';
@@ -242,12 +259,4 @@ switch($tt){
         break;
 }
 
-// session
-if (!isset($_SESSION['total'])) {
-    // ↓不是$Total->find(1)['total']，這樣才會存成陣列
-    $total = $Total->find(1);
-    $total['total']++;
-    $Total->save($total);
-    // 純數字存數字
-    $_SESSION['total'] = $total['total'];
-}
+
