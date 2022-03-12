@@ -217,9 +217,10 @@ $News = new DB('news');
 if (!isset($_SESSION['total'])) {
     // ↓不是$Total->find(1)['total']，這樣才會全部取出，存成陣列到變數total去
     $total = $Total->find(1);
-    // 我們才能改其中一個
+    // ↑先把id全部欄位取出變陣列
+    // ↓我們才能改其中一個
     $total['total']++;
-    // 再全部陣列(id1)存回
+    // 再全部陣列(id1)存回(有變及不變的都存回)
     $Total->save($total);
     // 純數字存數字
     $_SESSION['total'] = $total['total'];
